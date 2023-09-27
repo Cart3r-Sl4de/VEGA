@@ -34,7 +34,6 @@ async def setup_hook(self):
 
 ## It's a healthy habit not to have one's API keys visible on github
 file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chuckie_cheese.token')
-
 with open(file_path, 'r') as file:
     chuckie_cheese = file.readline().strip()
 
@@ -42,7 +41,7 @@ with open(file_path, 'r') as file:
 ## declare the bot/client here as well as the intentions
 intents = discord.Intents.all()
 intents.message_content = True
-activity = discord.Game('with Fate'),
+#activity = discord.Game('with Fate'),
 client = commands.Bot(command_prefix=">", intents=intents, activity=discord.Game('with Destiny'), status=discord.Status.do_not_disturb)
 
 ## --> events
