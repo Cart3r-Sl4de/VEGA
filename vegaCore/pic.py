@@ -6,7 +6,9 @@ from io import BytesIO
 
 #font = ImageFont.truetype("Minecraft.ttf", 10)
 file_location = os.path.dirname(os.path.abspath(__file__))
-
+pfp_location = os.path.join(file_location, './pics/pfp.png')
+target_location = os.path.join(file_location, './pics/target.png')
+wanted_location = os.path.join(file_location, './pics/wanted.png')
 class Pic(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -15,23 +17,31 @@ class Pic(commands.Cog):
     @app_commands.command(name="wanted")
     async def wanted(self, interaction: discord.Interaction, user: discord.Member = None):
         await imageGrabber(interaction, user)
-        wanted  = Image.open("wanted.png")
-        pfp = Image.open("pfp.png")
+        wanted  = Image.open(wanted_location)
+        pfp = Image.open(pfp_location)
         pfp = pfp.resize((282, 282))
 
         wanted.paste(pfp, (94, 234))
-        wanted.save("target.png")
+        wanted.save(target_location)
 
-        await interaction.response.send_message(file=discord.File("target.png"))
+        await interaction.response.send_message(file=discord.File(target_location))
+
+    ## a dandy profile picture grabber
+    @app_commands.command(name="pfp-grabber")
+    async def pfpGrabber(self, interaction: discord.Interaction, user: discord.Member = None):
+        await imageGrabber(interaction, user)
+        await interaction.response.send_message(file=discord.File(pfp_location))
 
 
 
+## to prevent redundancy, have the profile picture grabber be it's own callable function
 async def imageGrabber(interaction, user):
+    ## if the user is None, then do a random choice
     user = user or random.choice(interaction.guild.members)
     asset = user.avatar
     data = BytesIO(await asset.read())
     pfp = Image.open(data)
-    pfp.save("pfp.png")
+    pfp.save(pfp_location)
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Pic(bot))
