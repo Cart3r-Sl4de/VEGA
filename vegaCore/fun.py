@@ -1,7 +1,6 @@
 import discord, os, asyncio, random, requests, json
 from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import has_permissions
 
 np = [
   "Glad I could be of service",
