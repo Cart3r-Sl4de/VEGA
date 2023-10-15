@@ -7,6 +7,19 @@ class Polls(commands.Cog):
     def __init__(self, bot: commands.Cog) -> None:
         self.bot = bot
 
+    ##the yes or no poll, pretty simple
+    @app_commands.command(name="yes-no-poll")
+    async def yesNoPoll(self, interaction: discord.Interaction, question: str):
+
+        txt = "React with ✅ for yes or ❌ for no"
+        embed = discord.Embed(title = question, description=txt, colour = discord.Colour.blurple())
+
+        await interaction.response.send_message(embed=embed)
+        message = await interaction.original_response()
+        await message.add_reaction("✅")
+        await message.add_reaction("❌")
+
+    ## the ULTIMATE polling command
     @app_commands.command(name="poll")
     @app_commands.describe(title = "The title of your desired poll", option1 = "The first option of your poll (mandatory)",
                            option2 = "The second option of your poll (mandatory). Other options are optional")
@@ -35,15 +48,6 @@ class Polls(commands.Cog):
         for index in range(1, total_values):
             emoji =  f"{index}{emoji_suffix}"
             await message.add_reaction(emoji)
-
-    '''@app_commands.command(name="yes-no-poll")
-    async def yesNoPoll(self, interaction: discord.Interaction, question: str):
-        txt = "React with ✅ for yes or ❌ for no"
-        embed = discord.Embed(title = question, description=txt, colour = discord.Colour.blurple())
-        message = await interaction.response.send_message(embed=embed)
-        await message.add_reaction("✅")
-        await message.add_reaction("❌")'''
-    
 
 
 async def setup(bot: commands.Bot) -> None:
