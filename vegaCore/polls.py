@@ -8,29 +8,33 @@ class Polls(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="poll")
-    @app_commands.describe()
-    async def yesNoPoll(self, interaction: discord.Interaction, title: str,
+    @app_commands.describe(title = "The title of your desired poll", option1 = "The first option of your poll (mandatory)",
+                           option2 = "The second option of your poll (mandatory). Other options are optional")
+    async def pollInator(self, interaction: discord.Interaction, title: str,
                         option1: str, option2: str, option3: str = None, option4: str = None,
                         option5: str = None, option6: str = None, option7: str = None,
                         option8: str = None, option9: str = None):
         
-        emoji = {1: "1️⃣", 2: "2️⃣", 3: "3️⃣", 4: "4️⃣", 5: "5️⃣", 6: "6️⃣", 7: "7️⃣", 8: "8️⃣", 9: "9️⃣"}
+        emoji_suffix = f"\N{variation selector-16}\N{combining enclosing keycap}"
         variables = [option1, option2, option3, option4, option5, option6, option7, option8, option9]
         result = "React with: "
-        total_values = 0
+        total_values = 1
 
         for counter, value in enumerate(variables, start = 1):
             if value != None:
-                result += f"{emoji.get(counter)} for {value}, or "
-            else:
-                result = result[:-5]
-                total_values = counter
-                break
-        
+                emoji = f"{counter}{emoji_suffix}"
+                result += f"{emoji} for {value}, or "
+                total_values += 1
+            
+        result = result[:-5]
+
         embed = discord.Embed(title=title, description=result, colour=discord.Colour.red())
         await interaction.response.send_message(embed=embed)
         message = await interaction.original_response()
-        await message.add_reaction("✅")
+
+        for index in range(1, total_values):
+            emoji =  f"{index}{emoji_suffix}"
+            await message.add_reaction(emoji)
 
     '''@app_commands.command(name="yes-no-poll")
     async def yesNoPoll(self, interaction: discord.Interaction, question: str):
