@@ -64,6 +64,9 @@ vega_bot = Vega(command_prefix=">", intents=intents, activity=discord.Game('with
 @vega_bot.event
 async def on_message(message):
 
+    if message.author == vega_bot.user:
+        return
+
     message_lowered = (message.content).lower()
     ## if someone writes f in chat, react with f in chat
     if message_lowered == 'f':
@@ -95,19 +98,17 @@ async def on_message(message):
 async def test(interaction: discord.Interaction):
     await interaction.response.send_message(f'{interaction.user.mention} has summoned the angry one')
 
-@vega_bot.tree.command(name = "ping")
+@vega_bot.tree.command(name="ping")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f'Latency is: {round(vega_bot.latency * 1000)}ms')
 
-@vega_bot.tree.command(name = "sync")
-async def sync(interaction: discord.Interaction):
-    try:
-        synced = await vega_bot.tree.sync()
-        sync_output = f'Commands synced: {len(synced)}'
-    except Exception as e:
-        sync_output = f'Ran into error: {e}'
-    print(sync_output)
-    await interaction.response.send_message(sync_output)
+
+'''@vega_bot.tree.command(name="clear", description="Requires manage_messages permission. Clears chat for as many messages as chosen")
+async def clear(interaction: discord.Interaction, messages_to_delete: int):
+    if not interaction.user.guild_permissions.manage_messages:
+        await interaction.response.send_message("You do not have the needed permissions!")
+    elif interaction.user.guild_permissions.manage_messages:
+        interaction.channel.purge(limit=messages_to_delete)'''
 
 ## actually run the bot
 vega_bot.run(chuckie_cheese)
