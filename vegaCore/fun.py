@@ -19,18 +19,18 @@ class Fun(commands.Cog):
     self.bot = bot
     
   #eight ball
-  @app_commands.command(name="8ball")
+  @app_commands.command(name="8ball", description="Enter a question, and the 8ball will respond")
   async def eightball(self, interaction: discord.Interaction, question: str):
     await interaction.response.send_message(f'Question: {question}\nAnswer: {random.choice(eightball)}', ephemeral=True)
 
-  @app_commands.command(name="wise-quote")
+  @app_commands.command(name="wise-quote", description="This finds a insightful/wise quote for you")
   async def wisequote(self, interaction: discord.Interaction):
     response = requests.get('https://zenquotes.io/api/random')
     json_stuff = json.loads(response.text)
     quote = json_stuff[0]['q'] + ' -' + json_stuff[0]['a']
     await interaction.response.send_message(quote)
 
-  @app_commands.command(name="random-number-generator")
+  @app_commands.command(name="random-number-generator", description="Takes two numbers and then finds a random number between (and including) them")
   @app_commands.describe(minimum = "lowest number in the range for random selection", maximum = "largest number in range for random selection")
   async def randnum(self, interaction: discord.Interaction, minimum: int, maximum: int):
     if minimum > maximum:

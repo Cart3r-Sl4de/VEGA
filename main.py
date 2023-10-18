@@ -102,13 +102,5 @@ async def test(interaction: discord.Interaction):
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f'Latency is: {round(vega_bot.latency * 1000)}ms')
 
-
-'''@vega_bot.tree.command(name="clear", description="Requires manage_messages permission. Clears chat for as many messages as chosen")
-async def clear(interaction: discord.Interaction, messages_to_delete: int):
-    if not interaction.user.guild_permissions.manage_messages:
-        await interaction.response.send_message("You do not have the needed permissions!")
-    elif interaction.user.guild_permissions.manage_messages:
-        interaction.channel.purge(limit=messages_to_delete)'''
-
 ## actually run the bot
 vega_bot.run(chuckie_cheese)

@@ -8,7 +8,7 @@ class Polls(commands.Cog):
         self.bot = bot
 
     ##the yes or no poll, pretty simple
-    @app_commands.command(name="yes-no-poll")
+    @app_commands.command(name="yes-no-poll", description="Create a simple yes/no poll based on a specific question.")
     async def yesNoPoll(self, interaction: discord.Interaction, question: str):
 
         txt = "React with ✅ for yes or ❌ for no"
@@ -20,7 +20,7 @@ class Polls(commands.Cog):
         await message.add_reaction("❌")
 
     ## the ULTIMATE polling command
-    @app_commands.command(name="poll")
+    @app_commands.command(name="poll", description="Create a poll with a question and up to 9 answer options for users to choose from.")
     @app_commands.describe(title = "The title of your desired poll", option1 = "The first option of your poll (mandatory)",
                            option2 = "The second option of your poll (mandatory). Other options are optional", color = "Write the hex code for your desired color. Example: FFFFFF")
     async def pollInator(self, interaction: discord.Interaction, title: str,

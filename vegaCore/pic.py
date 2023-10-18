@@ -14,7 +14,7 @@ class Pic(commands.Cog):
         self.bot = bot
 
     ## wanted poster maker, can be random choice or specific user
-    @app_commands.command(name="wanted")
+    @app_commands.command(name="wanted", description="Generate a wanted poster using a user's profile picture by entering their username or leaving it blank for a random selection.")
     async def wanted(self, interaction: discord.Interaction, user: discord.Member = None):
         await imageGrabber(interaction, user)
         wanted  = Image.open(wanted_location)
@@ -27,7 +27,7 @@ class Pic(commands.Cog):
         await interaction.response.send_message(file=discord.File(target_location))
 
     ## a dandy profile picture grabber
-    @app_commands.command(name="pfp-grabber")
+    @app_commands.command(name="pfp-grabber", description="Enter someones username or leave the field blank (random) to grab their profile picture")
     async def pfpGrabber(self, interaction: discord.Interaction, user: discord.Member = None):
         await imageGrabber(interaction, user)
         await interaction.response.send_message(file=discord.File(pfp_location))
