@@ -5,6 +5,7 @@ from PIL import Image, ImageFont
 from io import BytesIO
 
 #font = ImageFont.truetype("Minecraft.ttf", 10)
+user_describe = "Mention a user to use their pfp, or leave blank for random choice."
 file_location = os.path.dirname(os.path.abspath(__file__))
 pfp_location = os.path.join(file_location, './pics/pfp.png')
 target_location = os.path.join(file_location, './pics/target.png')
@@ -14,7 +15,8 @@ class Pic(commands.Cog):
         self.bot = bot
 
     ## wanted poster maker, can be random choice or specific user
-    @app_commands.command(name="wanted", description="Generate a wanted poster using a user's profile picture by entering their username or leaving it blank for a random selection.")
+    @app_commands.command(name="wanted", description="Generate a wanted poster using a user's profile picture.")
+    @app_commands.describe(user=user_describe)
     async def wanted(self, interaction: discord.Interaction, user: discord.Member = None):
         await imageGrabber(interaction, user)
         wanted  = Image.open(wanted_location)
@@ -27,7 +29,8 @@ class Pic(commands.Cog):
         await interaction.response.send_message(file=discord.File(target_location))
 
     ## a dandy profile picture grabber
-    @app_commands.command(name="pfp-grabber", description="Enter someones username or leave the field blank (random) to grab their profile picture")
+    @app_commands.command(name="pfp-grabber", description="Enter someones username or leave the field blank (random) to grab their profile picture.")
+    @app_commands.describe(user=user_describe)
     async def pfpGrabber(self, interaction: discord.Interaction, user: discord.Member = None):
         await imageGrabber(interaction, user)
         await interaction.response.send_message(file=discord.File(pfp_location))

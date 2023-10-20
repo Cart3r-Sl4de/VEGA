@@ -7,7 +7,7 @@ class Polls(commands.Cog):
     def __init__(self, bot: commands.Cog) -> None:
         self.bot = bot
 
-    ##the yes or no poll, pretty simple
+    ## the yes or no poll, pretty simple
     @app_commands.command(name="yes-no-poll", description="Create a simple yes/no poll based on a specific question.")
     async def yesNoPoll(self, interaction: discord.Interaction, question: str):
 
@@ -21,8 +21,8 @@ class Polls(commands.Cog):
 
     ## the ULTIMATE polling command
     @app_commands.command(name="poll", description="Create a poll with a question and up to 9 answer options for users to choose from.")
-    @app_commands.describe(title = "The title of your desired poll", option1 = "The first option of your poll (mandatory)",
-                           option2 = "The second option of your poll (mandatory). Other options are optional", color = "Write the hex code for your desired color. Example: FFFFFF")
+    @app_commands.describe(title = "The title of your desired poll.", option1 = "The first option of your poll (mandatory).",
+                           option2 = "The second option of your poll (mandatory). Other options are optional.", color = "Write the hex code for your desired color. Example: \"aa1bab\"")
     async def pollInator(self, interaction: discord.Interaction, title: str,
                         option1: str, option2: str, option3: str = None, option4: str = None,
                         option5: str = None, option6: str = None, option7: str = None,

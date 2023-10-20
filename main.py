@@ -4,12 +4,12 @@ from discord.ext import commands
 
 file_location = os.path.dirname(os.path.abspath(__file__))
 ## lists for emoji reaction compositions
-fricc = ["🇫", "🇷", "🇮", "🇨", "🇰"]
 dang = ["🇩", "🇦", "🇳", "🇬"]
+fricc = ["🇫", "🇷", "🇮", "🇨", "🇰"]
 ## lists of words to detect
-superior_words = ["frick", "fricc", "dang"]
-karEnTuk = ["rip and tear", "kar en tuk"]
 cipher = ["dorito", "bill", "cipher"]
+karEnTuk = ["rip and tear", "kar en tuk"]
+superior_words = ["frick", "fricc", "dang"]
 ## lists of responses
 affirming_emojis = ["👌", "👍", "<:ThanosFingerguns:749486523669413908>"]
 rockin_stone = [
@@ -26,6 +26,8 @@ rockin_stone = [
     "Rock and Stone, Brother!", "Rock and Stone to the Bone!", "For Karl!",
     "Leave no Dwarf behind!", "By the Beard!"
 ]
+test_cases = ["has summoned the angry one", "is ready for a high class bout!", "is buying pizza", "is ready for a crusade!"]
+youre_welcome = ["It is an honor to assist you", "Got your back", "👌", "Tis grand to be kind to someone who is one of a kind"]
 
 ## add the cogs to the program automagically
 ## need to class-ify the bot.
@@ -64,15 +66,29 @@ vega_bot = Vega(command_prefix=">", intents=intents, activity=discord.Game('with
 @vega_bot.event
 async def on_message(message):
 
+    # prevent infinite loops
     if message.author == vega_bot.user:
         return
 
+    # the emoji-inator
+    if (":" == message.content[0] and ":" == message.content[-1]) or (
+            ";" == message.content[0] and ";" == message.content[-1]):
+        mention = message.author.mention
+        emoji_name = message.content[1:-1]
+        for emoji in message.guild.emojis:
+            if emoji_name == emoji.name:
+                await message.channel.send(str(emoji))
+                response = f"- {mention}"
+                await message.channel.send(response)
+                await message.delete()
+                break
+
     message_lowered = (message.content).lower()
-    ## if someone writes f in chat, react with f in chat
+    # if someone writes f in chat, react with f in chat
     if message_lowered == 'f':
         await message.add_reaction("🇫")
 
-    ## in the event someone says a naughty word
+    # in the event someone says a naughty word
     if "fuck" in message_lowered:
         for emoji in fricc:
             await message.add_reaction(emoji)
@@ -81,13 +97,16 @@ async def on_message(message):
         for emoji in dang:
             await message.add_reaction(emoji)
 
-    ## in the event someone says a superior word
+    # in the event someone says a superior word
     if any(word in message_lowered for word in superior_words):
         await message.channel.send(random.choice(affirming_emojis))
 
     if "rock and stone" in message_lowered:
         await message.channel.send(random.choice(rockin_stone))
         await message.channel.send("⛏️")
+
+    if "thank you" and "vega" in message_lowered:
+        await message.channel.send(random.choice(youre_welcome))
         
 
 
@@ -96,11 +115,20 @@ async def on_message(message):
 ## test command
 @vega_bot.tree.command(name = "test")
 async def test(interaction: discord.Interaction):
-    await interaction.response.send_message(f'{interaction.user.mention} has summoned the angry one')
+    await interaction.response.send_message(f'{interaction.user.mention} {random.choice(test_cases)}')
 
+## ping command, just send back the ping
 @vega_bot.tree.command(name="ping")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f'Latency is: {round(vega_bot.latency * 1000)}ms')
 
-## actually run the bot
+## clear command, clears set amount of messages
+@vega_bot.tree.command(name="clear", description="Delete set amount of messages from current channel")
+@app_commands.describe(amount="Amount of messages to delete")
+@commands.has_permissions(manage_messages=True)
+async def clear(interaction: discord.Interaction, amount: int = 5):
+    await interaction.response.defer()
+    await interaction.channel.purge(limit=(int(amount) + 1))
+
+## --> actually run the bot
 vega_bot.run(chuckie_cheese)
