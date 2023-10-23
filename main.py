@@ -105,7 +105,7 @@ async def on_message(message):
         await message.channel.send(random.choice(rockin_stone))
         await message.channel.send("⛏️")
 
-    if "thank you" and "vega" in message_lowered:
+    if "thank you" in message_lowered and "vega" in message_lowered:
         await message.channel.send(random.choice(youre_welcome))
         
 
