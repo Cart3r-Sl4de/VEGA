@@ -99,7 +99,7 @@ async def on_message(message):
 
     # in the event someone says a superior word
     if any(word in message_lowered for word in superior_words):
-        await message.channel.send(random.choice(affirming_emojis))
+        await message.add_reaction(random.choice(affirming_emojis))
 
     if "rock and stone" in message_lowered:
         await message.channel.send(random.choice(rockin_stone))
