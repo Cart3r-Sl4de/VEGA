@@ -29,12 +29,7 @@ class Fun(commands.Cog):
     if minimum > maximum:
       await interaction.response.send_message(f'Error: your minimum ({minimum}) is larger than your maximum ({maximum}).')
     else:
-      try:
-        min = int(minimum)
-        max = int(maximum)
-        await interaction.response.send_message(f'Random number: {random.randint(min, max)}')
-      except:
-        await interaction.response.send_message('Error: problem with converting to integer. You most likely were a comedian and tried to send a word instead of a number.')
+      await interaction.response.send_message(f'Random number: {random.randint(minimum, maximum)}')
 
 
   
