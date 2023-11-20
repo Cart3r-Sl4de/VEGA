@@ -58,7 +58,7 @@ intents = discord.Intents.all()
 intents.message_content = True
 
 ## give life to the bot
-vega_bot = Vega(command_prefix=">", intents=intents, activity=discord.Game('with Destiny'), status=discord.Status.do_not_disturb)
+vega_bot = Vega(command_prefix=">", intents=intents, activity=discord.Game('with Fire'), status=discord.Status.idle)
 
 ## --> events
 
@@ -71,8 +71,7 @@ async def on_message(message):
         return
 
     # the emoji-inator
-    if (":" == message.content[0] and ":" == message.content[-1]) or (
-            ";" == message.content[0] and ";" == message.content[-1]):
+    if (";" == message.content[0] and ";" == message.content[-1]):
         mention = message.author.mention
         emoji_name = message.content[1:-1]
         for emoji in message.guild.emojis:
