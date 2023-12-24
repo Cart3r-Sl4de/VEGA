@@ -122,24 +122,24 @@ async def test(interaction: discord.Interaction):
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f'Latency is: {round(vega_bot.latency * 1000)}ms')
 
-@vega_bot.tree.command(name="uptime")
+## uptime timer, 
+@vega_bot.tree.command(name="uptime", description="Calculates how long the bot has been up")
 async def uptime(interaction: discord.Interaction):
     end_time = time.perf_counter()
     result_time = end_time - start_time
     result_time = round(result_time)
-    result_time_final = ""
+    time_output = ""
 
     if result_time >= 60 and result_time < 3600:
-        result_time_final = f"{round(result_time/60)} minutes."
-    elif result_time >= 3600:
-        result_time_final = f"{round(result_time/3600)} hours."
+        time_output = f"{round(result_time/60)} minutes."
+    elif result_time >= 3600 and result_time < 3600*24:
+        time_output = f"{round(result_time/3600)} hours."
+    elif result_time > 3600*24:
+        time_output = f"{round(result_time/(3600*24))} day(s)."
     else:
-        result_time_final = f"{round(result_time)} seconds."
+        time_output = f"{round(result_time)} seconds."
 
-
-    ## come back and improve the resulting seconds
-
-    await interaction.response.send_message(f'Uptime: {result_time_final}')
+    await interaction.response.send_message(f'Uptime: {time_output}')
 
 ## clear command, clears set amount of messages
 @vega_bot.tree.command(name="clear", description="Delete set amount of messages from current channel")
