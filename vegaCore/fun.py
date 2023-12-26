@@ -36,24 +36,24 @@ class Fun(commands.Cog):
   ## Time past since secret docs are leaked to War Thunder
   @app_commands.command(name="war-thunder-counter", description="Calculates how long it has been since secret documents are leaked on War Thunder")
   async def warThunderCounter(self, interaction: discord.Interaction):
-    with open(os.path.join(file_location, 'pics and files', 'war_thunder_date.txt'), "r") as file:
+    with open(os.path.join(file_location, 'picsAndFiles', 'war_thunder_date.txt'), "r") as file:
       stored_date_str = file.read().strip()
 
     stored_date = datetime.strptime(stored_date_str, "%Y-%m-%d %H:%M:%S")
     current_time = datetime.now()
     time_difference = current_time - stored_date
 
-    print(f"Time difference: {time_difference}")
+    await interaction.response.send_message(f"Time difference: {time_difference.days} days.")
 
   ## Reset the War Thunder Day Counter
   @app_commands.command(name="war-thunder-reset-counter", description="Reset the War Thunder data leak counter")
   async def warThunderReset(self, interaction: discord.Interaction):
     current_time_formatted = (datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
 
-    with open(os.path.join(file_location, 'pics and files', 'war_thunder_date.txt'), "w") as file:
+    with open(os.path.join(file_location, 'picsAndFiles', 'war_thunder_date.txt'), "w") as file:
       file.write(current_time_formatted)
 
-    await interaction.response.send_message("Congration, death")
+    await interaction.response.send_message(file=discord.File(os.path.join(file_location, 'picsAndFiles', 'dayCounter.png')))
 
 
 
