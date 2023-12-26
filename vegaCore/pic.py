@@ -7,9 +7,9 @@ from io import BytesIO
 #font = ImageFont.truetype("Minecraft.ttf", 10)
 user_describe = "Mention a user to use their pfp, or leave blank for random choice."
 file_location = os.path.dirname(os.path.abspath(__file__))
-pfp_location = os.path.join(file_location, './pics/pfp.png')
-target_location = os.path.join(file_location, './pics/target.png')
-wanted_location = os.path.join(file_location, './pics/wanted.png')
+pfp_location = os.path.join(file_location, './picsAndFiles/pfp.png')
+target_location = os.path.join(file_location, './picsAndFiles/target.png')
+wanted_location = os.path.join(file_location, './picsAndFiles/wanted.png')
 class Pic(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot

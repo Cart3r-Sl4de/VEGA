@@ -1,8 +1,9 @@
-import discord, os, random
+import discord, os, random, time
 from discord import app_commands
 from discord.ext import commands
 
 file_location = os.path.dirname(os.path.abspath(__file__))
+start_time = time.perf_counter()
 ## lists for emoji reaction compositions
 dang = ["🇩", "🇦", "🇳", "🇬"]
 fricc = ["🇫", "🇷", "🇮", "🇨", "🇰"]
@@ -120,6 +121,25 @@ async def test(interaction: discord.Interaction):
 @vega_bot.tree.command(name="ping")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f'Latency is: {round(vega_bot.latency * 1000)}ms')
+
+## uptime timer, 
+@vega_bot.tree.command(name="uptime", description="Calculates how long the bot has been up")
+async def uptime(interaction: discord.Interaction):
+    end_time = time.perf_counter()
+    result_time = end_time - start_time
+    result_time = round(result_time)
+    time_output = ""
+
+    if result_time >= 60 and result_time < 3600:
+        time_output = f"{round(result_time/60)} minutes."
+    elif result_time >= 3600 and result_time < 3600*24:
+        time_output = f"{round(result_time/3600)} hours."
+    elif result_time > 3600*24:
+        time_output = f"{round(result_time/(3600*24))} day(s)."
+    else:
+        time_output = f"{round(result_time)} seconds."
+
+    await interaction.response.send_message(f'Uptime: {time_output}')
 
 ## clear command, clears set amount of messages
 @vega_bot.tree.command(name="clear", description="Delete set amount of messages from current channel")
