@@ -43,10 +43,10 @@ class Fun(commands.Cog):
     current_time = datetime.now()
     time_difference = current_time - stored_date
 
-    await interaction.response.send_message(f"Time difference: {time_difference.days} days.")
+    await interaction.response.send_message(f"Day(s) since classified documents have been leaked in War Thunder Forums: {time_difference.days} days.")
 
   ## Reset the War Thunder Day Counter
-  @app_commands.command(name="war-thunder-reset-counter", description="Reset the War Thunder data leak counter")
+  @app_commands.command(name="war-thunder-reset", description="Reset the War Thunder data leak counter")
   async def warThunderReset(self, interaction: discord.Interaction):
     current_time_formatted = (datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
 
@@ -54,8 +54,6 @@ class Fun(commands.Cog):
       file.write(current_time_formatted)
 
     await interaction.response.send_message(file=discord.File(os.path.join(file_location, 'picsAndFiles', 'dayCounter.png')))
-
-
 
   
 async def setup(bot: commands.Bot) -> None:
