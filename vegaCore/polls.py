@@ -36,7 +36,7 @@ class Polls(commands.Cog):
         for counter, value in enumerate(variables, start = 1):
             if value != None:
                 emoji = f"{counter}{emoji_suffix}"
-                result += f"{emoji} for {value}, or "
+                result += f"{emoji} for {value}\n"
                 total_values += 1
             
         result = result[:-5]
