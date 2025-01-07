@@ -1,10 +1,25 @@
-import discord, os, asyncio, random, requests, json
+import discord, os, asyncio, random, requests, json, pytz
 from datetime import datetime
 from discord import app_commands
 from discord.ext import commands
+from typing import Literal
 
 file_location = os.path.dirname(os.path.abspath(__file__))
 eightball = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."]
+ALLOWED_TIMEZONES = [
+    'US/Eastern',
+    'US/Mountain',
+    'US/Pacific',
+    'Europe/Paris',
+    'Europe/Kiev',
+    'Europe/Berlin',
+    'Canada/Atlantic',
+    'Canada/Central',
+    'Canada/Eastern',
+    'Canada/Pacific'
+]
+# apparently 'type hinting' is mandatory for lists in function declarations
+Timezones = Literal[tuple(ALLOWED_TIMEZONES)]
 
 class Fun(commands.Cog):
 
@@ -55,6 +70,18 @@ class Fun(commands.Cog):
 
     await interaction.response.send_message(file=discord.File(os.path.join(file_location, 'picsAndFiles', 'dayCounter.png')))
 
+  # timezone calculator. https://mljar.com/blog/list-pytz-timezones/
+  @app_commands.command(name="timezone-calc", description="Calculate what time it would be from one timezone to another")
+  @app_commands.describe(initial_timezone = "The timezone you are converting from", target_timezone = "Timezone you're converting to", time = "The time being converted from initial to target (24 hour time). Ex: 12/31/2024 14:25")
+  async def timeStone(self, interaction: discord.Interaction, initial_timezone: Timezones, target_timezone: Timezones, time: str):
+            time_format = '%m/%d/%Y %H:%M'
+            try:
+                time_result = datetime.strptime(time, time_format)
+                firstTZ = pytz.timezone(initial_timezone).localize(time_result)
+                result = firstTZ.astimezone(pytz.timezone(target_timezone))
+                await interaction.response.send_message(f"**{initial_timezone} > {target_timezone}:**\n{time} > {result}")
+            except:
+                await interaction.response.send_message("Error: Most likely you entered the date in the wrong format. Remember that it's 24 hour time, and to use slashes for the date and a colon (:) for the time!\nFormat example: 12/31/2003 14:25")
   
 async def setup(bot: commands.Bot) -> None:
   await bot.add_cog(Fun(bot))
