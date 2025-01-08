@@ -70,18 +70,32 @@ class Fun(commands.Cog):
 
     await interaction.response.send_message(file=discord.File(os.path.join(file_location, 'picsAndFiles', 'dayCounter.png')))
 
-  # timezone calculator. https://mljar.com/blog/list-pytz-timezones/
-  @app_commands.command(name="timezone-calc", description="Calculate what time it would be from one timezone to another")
-  @app_commands.describe(initial_timezone = "The timezone you are converting from", target_timezone = "Timezone you're converting to", time = "The time being converted from initial to target (24 hour time). Ex: 12/31/2024 14:25")
-  async def timeStone(self, interaction: discord.Interaction, initial_timezone: Timezones, target_timezone: Timezones, time: str):
-            time_format = '%m/%d/%Y %H:%M'
-            try:
-                time_result = datetime.strptime(time, time_format)
-                firstTZ = pytz.timezone(initial_timezone).localize(time_result)
-                result = firstTZ.astimezone(pytz.timezone(target_timezone))
-                await interaction.response.send_message(f"**{initial_timezone} > {target_timezone}:**\n{time} > {result}")
-            except:
-                await interaction.response.send_message("Error: Most likely you entered the date in the wrong format. Remember that it's 24 hour time, and to use slashes for the date and a colon (:) for the time!\nFormat example: 12/31/2003 14:25")
+  # timezone calculator.
+  # list of timezones from pytz: https://mljar.com/blog/list-pytz-timezones/
+  @app_commands.command(name="timezone-calc", description="Calculate what time it would be from one timezone to another. Uses 24 hour time MM/DD/YYYY")
+  @app_commands.describe(initial_timezone = "The timezone you are converting from", target_timezone = "Timezone you're converting to", initial_time = "Write \"now\" or date/time. Ex: MM/DD/YYYY 19:45 (follow format, and is 24hr)")
+  async def timeStone(self, interaction: discord.Interaction, initial_timezone: Timezones, target_timezone: Timezones, initial_time: str):
+        time_format = '%m/%d/%Y %H:%M'
+        ## put the main code in the try/except loop, to prevent issues with format
+        try:
+            ### if the user enters "now", set the initial time to now in the time format
+            if initial_time.lower() == "now":
+                ### doozy of one-liner: gets current datetime in initial timezone, and formats the time 
+                ### other lines of this code do some of the steps here, but redundancy doesn't negatively effect result
+                initial_time = (datetime.now(pytz.timezone(initial_timezone))).strftime(time_format)
+            ### whether or not the above condition is set, convert the string time to a datatype time 
+            time_result = datetime.strptime(initial_time, time_format)
+            ### set the query time to be the initial tz
+            firstTZ = pytz.timezone(initial_timezone).localize(time_result)
+            ### the result of converting query time from first tz to target tz
+            result = firstTZ.astimezone(pytz.timezone(target_timezone))
+            ### convert the result to the time format
+            result = datetime.strftime(result, time_format)
+            await interaction.response.send_message(f"**{initial_timezone} > {target_timezone}:**\n{initial_time} > {result}")
+        except Exception as e:
+            ### send error in terminal, not a good practice to send descriptive errors in public places
+            print(f"[!] Error: {e}")
+            await interaction.response.send_message("Error: Most likely you entered the date in the wrong format. Remember that it's 24 hour time, and to use slashes for the date and a colon (:) for the time!\nFormat example: 05/08/1945 14:25 or MM/DD/YYYY HH:MM")
   
 async def setup(bot: commands.Bot) -> None:
   await bot.add_cog(Fun(bot))
