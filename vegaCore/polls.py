@@ -36,10 +36,10 @@ class Polls(commands.Cog):
         for counter, value in enumerate(variables, start = 1):
             if value != None:
                 emoji = f"{counter}{emoji_suffix}"
-                result += f"{emoji} for {value}\n"
+                result += f"\n{emoji} for {value}"
                 total_values += 1
             
-        result = result[:-5]
+        result = result[:-1]
 
         color_result = f"0x{color}"
         embed = discord.Embed(title=title, description=result, colour=discord.Color.from_str(color_result))
