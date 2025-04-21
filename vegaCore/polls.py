@@ -38,8 +38,8 @@ class Polls(commands.Cog):
                 emoji = f"{counter}{emoji_suffix}"
                 result += f"\n{emoji} for {value}"
                 total_values += 1
-            
-        result = result[:-1]
+        ### originally reduced the size of the output, apparently isn't needed anymore    
+        #result = result[:-1]
 
         color_result = f"0x{color}"
         embed = discord.Embed(title=title, description=result, colour=discord.Color.from_str(color_result))
