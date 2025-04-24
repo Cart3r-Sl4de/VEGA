@@ -5,7 +5,6 @@ from discord.ext import commands
 from typing import Literal
 
 file_location = os.path.dirname(os.path.abspath(__file__))
-bible_url = "https://beta.ourmanna.com/api/v1/get?format=text&order=daily"
 eightball = ["It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.", "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful."]
 ALLOWED_TIMEZONES = [
     'US/Eastern',
@@ -29,8 +28,10 @@ class Fun(commands.Cog):
 
   @app_commands.command(name="verse-of-the-day", description="Simply calls a website for the verse of the day, and shows ya :)")
   async def verseOTD(self, interaction: discord.Interaction):
-     bible_response = requests.get(bible_url, headers={"accept": "application/json"})
-     await interaction.response.send_message(bible_response)
+     bible_url = "https://beta.ourmanna.com/api/v1/get?format=text&order=daily"
+     headers = {"accept": "application/json"}
+     bible_response = requests.get(bible_url, headers=headers)
+     await interaction.response.send_message(bible_response.text)
     
   ## eight ball, ask it a question and it will try to not be sarcastic
   @app_commands.command(name="8ball", description="Enter a question, and the 8ball will respond")
